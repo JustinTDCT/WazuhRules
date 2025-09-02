@@ -1,0 +1,64 @@
+ <!-- <decoder name="suricata-eve">
+    <prematch type="pcre2">^\s*\{.*"event_type"\s*:\s*".*".*\}\s*$</prematch>
+  </decoder>
+
+  <decoder name="suricata-alert">
+    <parent>suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"(alert)"</regex>
+    <order>event_type</order>
+  </decoder> -->
+  
+  <decoder name="jd-suricata-eve">
+    <prematch type="pcre2">^\s*\{.*"event_type"\s*:\s*".*"</prematch>
+    <!-- capture the event_type value so the base does "work" -->
+    <regex type="pcre2">"event_type"\s*:\s*"([^"]+)"</regex>
+    <order>event_type</order>
+  </decoder>
+
+  <decoder name="jd-suricata-srcip">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"src_ip"\s*:\s*"([^"]+)"</regex>
+    <order>src_ip</order>
+  </decoder>
+
+  <decoder name="jd-suricata-srcport">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"src_port"\s*:\s*(\d+)</regex>
+    <order>src_port</order>
+  </decoder>
+ 
+   <decoder name="jd-suricata-destip">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"dest_ip"\s*:\s*"([^"]+)"</regex>
+    <order>dest_ip</order>
+  </decoder>
+
+  <decoder name="jd-suricata-destport">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"dest_port"\s*:\s*(\d+)</regex>
+    <order>dest_port</order>
+  </decoder>
+
+  <decoder name="jd-suricata-proto">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"proto"\s*:\s*"([^"]+)"</regex>
+    <order>proto</order>
+  </decoder>
+
+  <decoder name="jd-suricata-signature">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"alert"\s*:\s*\{[^}]*"signature"\s*:\s*"([^"]+)"</regex>
+    <order>alert_signature</order>
+  </decoder>
+
+  <decoder name="jd-suricata-category">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"alert"\s*:\s*\{[^}]*"category"\s*:\s*"([^"]*)"</regex>
+    <order>alert_category</order>
+  </decoder>
+
+  <decoder name="jd-suricata-severity">
+    <parent>jd-suricata-eve</parent>
+    <regex type="pcre2">"event_type"\s*:\s*"alert".*"alert"\s*:\s*\{[^}]*"severity"\s*:\s*(\d+)</regex>
+    <order>alert_severity</order>
+  </decoder>
