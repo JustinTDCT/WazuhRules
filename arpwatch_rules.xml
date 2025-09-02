@@ -1,0 +1,23 @@
+<group name="local,arpwatch">
+
+  <!-- Base: anything decoded by jd-arpwatch -->
+  <rule id="979700" level="0">
+    <decoded_as>jd-arpwatch</decoded_as>
+    <description>Arpwatch base</description>
+  </rule>
+
+  <!-- New station -->
+  <rule id="979701" level="5">
+    <if_sid>979700</if_sid>
+    <match>new station</match>
+    <description>Arpwatch - New station $(mac) at $(ip) vlan $(vlan)</description>
+  </rule>
+
+  <!-- MAC change -->
+  <rule id="979702" level="7">
+    <if_sid>979700</if_sid>
+    <match>changed ethernet address</match>
+    <description>Arpwatch - MAC change at $(ip) -> $(mac)</description>
+  </rule>
+
+</group>
