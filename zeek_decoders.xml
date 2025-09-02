@@ -1,0 +1,79 @@
+  <decoder name="jd-zeek-json">
+    <prematch type="pcre2">^\s*\{.*"_path"\s*:\s*".*"</prematch>
+    <!-- capture the _path value so the base "does work" -->
+    <regex type="pcre2">"_path"\s*:\s*"([^"]+)"</regex>
+    <order>_path</order>
+  </decoder>
+  
+ <decoder name="jd-zeek-conn-origh">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"conn".*"id\.orig_h"\s*:\s*"([^"]+)"</regex>
+    <order>id.orig_h</order>
+  </decoder>
+
+  <decoder name="jd-zeek-conn-origp">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"conn".*"id\.orig_p"\s*:\s*([0-9]+)</regex>
+    <order>id.orig_p</order>
+  </decoder>
+
+  <decoder name="jd-zeek-conn-resph">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"conn".*"id\.resp_h"\s*:\s*"([^"]+)"</regex>
+    <order>id.resp_h</order>
+  </decoder>
+
+  <decoder name="jd-zeek-conn-respp">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"conn".*"id\.resp_p"\s*:\s*([0-9]+)</regex>
+    <order>id.resp_p</order>
+  </decoder>
+
+  <decoder name="jd-zeek-conn-proto">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"conn".*"proto"\s*:\s*"([^"]+)"</regex>
+    <order>proto</order>
+  </decoder>
+
+  <decoder name="jd-zeek-conn-state">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"conn".*"conn_state"\s*:\s*"([^"]+)"</regex>
+    <order>conn_state</order>
+  </decoder>
+
+  <decoder name="jd-zeek-notice-note">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"notice".*"note"\s*:\s*"([^"]+)"</regex>
+    <order>note</order>
+  </decoder>
+
+  <decoder name="jd-zeek-notice-msg">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"notice".*"msg"\s*:\s*"([^"]*)"</regex>
+    <order>msg</order>
+  </decoder>
+
+  <decoder name="jd-zeek-dns-query">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"dns".*"query"\s*:\s*"([^"]+)"</regex>
+    <order>query</order>
+  </decoder>
+
+  <decoder name="jd-zeek-dns-qtype">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"dns".*"qtype_name"\s*:\s*"([^"]+)"</regex>
+    <order>qtype_name</order>
+  </decoder>
+
+  <decoder name="jd-zeek-dns-rcode">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"_path"\s*:\s*"dns".*"rcode_name"\s*:\s*"([^"]+)"</regex>
+    <order>rcode_name</order>
+  </decoder>
+
+  <!-- Common timestamp (works for any _path that includes "ts": number) -->
+  <decoder name="jd-zeek-ts">
+    <parent>jd-zeek-json</parent>
+    <regex type="pcre2">"ts"\s*:\s*([0-9.]+)</regex>
+    <order>ts</order>
+  </decoder>
