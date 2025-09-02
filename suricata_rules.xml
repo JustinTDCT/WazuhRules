@@ -1,0 +1,66 @@
+<group name="local,suricata">
+
+  <!-- Base selector for any Suricata EVE JSON -->
+  <rule id="961000" level="0">
+    <field name="event_type">.+</field>
+    <description>Suricata event (EVE JSON)</description>
+  </rule>
+
+  <!-- Alerts: map Suricata severity (1..5) to Wazuh levels -->
+  <rule id="961010" level="12">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^alert$</field>
+    <field name="alert.severity">^1$</field>
+    <description>Suricata ALERT (sev=1) — $(alert.signature)</description>
+  </rule>
+
+  <rule id="961011" level="10">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^alert$</field>
+    <field name="alert.severity">^2$</field>
+    <description>Suricata ALERT (sev=2) — $(alert.signature)</description>
+  </rule>
+
+  <rule id="961012" level="8">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^alert$</field>
+    <field name="alert.severity">^3$</field>
+    <description>Suricata ALERT (sev=3) — $(alert.signature)</description>
+  </rule>
+
+  <rule id="961013" level="6">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^alert$</field>
+    <field name="alert.severity">^4$</field>
+    <description>Suricata ALERT (sev=4) — $(alert.signature)</description>
+  </rule>
+
+  <rule id="961014" level="4">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^alert$</field>
+    <field name="alert.severity">^5$</field>
+    <description>Suricata ALERT (sev=5) — $(alert.signature)</description>
+  </rule>
+
+  <!-- Convenience buckets (HTTP Basic auth, DNS exfil patterns, etc.) -->
+  <rule id="961020" level="7">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^http$</field>
+    <match>Authorization.*Basic</match>
+    <description>Suricata HTTP — Basic auth observed</description>
+  </rule>
+
+  <rule id="961021" level="6">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^dns$</field>
+    <match>"rrname":".*\.onion"|".*\.bit"|".*\.tor"</match>
+    <description>Suricata DNS — Suspicious TLD query</description>
+  </rule>
+
+  <!-- Catch-all for any alert without severity parsed (should be rare) -->
+  <rule id="961099" level="7">
+    <if_sid>961000</if_sid>
+    <field name="event_type">^alert$</field>
+    <description>Suricata ALERT — $(alert.signature)</description>
+  </rule>
+</group>
