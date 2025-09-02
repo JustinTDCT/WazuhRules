@@ -1,0 +1,17 @@
+  <decoder name="jd-arpwatch">
+    <prematch type="pcre2">^arpwatch:\s+</prematch>
+  </decoder>
+
+  <!-- new station -->
+  <decoder name="jd-arpwatch-new">
+    <parent>jd-arpwatch</parent>
+    <regex type="pcre2">^arpwatch:\s+new station\s+([0-9a-f:]{17})\s+([0-9.]+)(?:\s+vlan\s+(\d+))?.*</regex>
+    <order>mac,ip,vlan</order>
+  </decoder>
+
+<decoder name="jd-arpwatch-changed">
+  <parent>jd-arpwatch</parent>
+  <regex type="pcre2">^arpwatch:\s+changed ethernet address\s+([0-9.]+)\s+([0-9A-Fa-f:]{17}).*</regex>
+  <order>ip,mac</order>
+
+  </decoder>
