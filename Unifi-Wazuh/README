@@ -1,0 +1,11 @@
+sudo mkdir -p /opt/unifi-to-wazuh /var/lib/unifi-to-wazuh
+sudo chmod +x /opt/unifi-to-wazuh/unifi_events_to_wazuh.py
+
+sudo apt-get install -y python3-venv
+python3 -m venv /opt/unifi-to-wazuh/.venv
+/opt/unifi-to-wazuh/.venv/bin/python -m pip install --upgrade pip
+/opt/unifi-to-wazuh/.venv/bin/pip install pymongo
+sudo apt-get install -y python3-pymongo
+
+sudo systemctl daemon-reload
+sudo systemctl enable --now unifi-to-wazuh
