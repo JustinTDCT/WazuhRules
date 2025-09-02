@@ -1,0 +1,53 @@
+  GNU nano 7.2                                                                              /etc/systemd/system/unifi-to-wazuh.service                                                                                       
+# /etc/systemd/system/unifi-to-wazuh.service
+[Unit]
+Description=UniFi MongoDB → Wazuh Syslog bridge
+After=network-online.target
+
+[Service]
+User=root
+WorkingDirectory=/opt/unifi-to-wazuh
+Environment=MONGO_URI=mongodb://127.0.0.1:27117/ace
+Environment=SYSLOG_HOST=10.150.125.65
+Environment=SYSLOG_PORT=514
+ExecStart=/opt/unifi-to-wazuh/.venv/bin/python /opt/unifi-to-wazuh/unifi_events_to_wazuh.py
+Restart=always
+RestartSec=3
+
+[Install]
+WantedBy=multi-user.target
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                      [ Read 17 lines ]
+^G Help          ^O Write Out     ^W Where Is      ^K Cut           ^T Execute       ^C Location      M-U Undo         M-A Set Mark     M-] To Bracket   M-Q Previous     ^B Back          ^◂ Prev Word     ^A Home
+^X Exit          ^R Read File     ^\ Replace       ^U Paste         ^J Justify       ^/ Go To Line    M-E Redo         M-6 Copy         ^Q Where Was     M-W Next         ^F Forward       ^▸ Next Word     ^E End
