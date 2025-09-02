@@ -1,0 +1,90 @@
+<group name="local,zeek">
+
+  <!-- Base: any JSON that contains a Zeek _path -->
+  <rule id="966000" level="0">
+    <decoded_as>json</decoded_as>
+    <match>"_path"\s*:\s*"</match>
+    <description>Zeek event (json base)</description>
+  </rule>
+
+  <!-- CONN: RDP observed -->
+  <rule id="966200" level="7">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn".*"id\.resp_p"\s*:\s*3389</match>
+    <description>Zeek conn — RDP observed $(id.orig_h) -> $(id.resp_h)</description>
+  </rule>
+
+  <!-- CONN: uncommon states (split per state to avoid regex quirks) -->
+  <rule id="966211" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn".*"conn_state"\s*:\s*"S0"</match>
+    <description>Zeek conn — conn_state S0 $(id.orig_h) -> $(id.resp_h)</description>
+  </rule>
+  <rule id="966212" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn".*"conn_state"\s*:\s*"REJ"</match>
+    <description>Zeek conn — conn_state REJ $(id.orig_h) -> $(id.resp_h)</description>
+  </rule>
+  <rule id="966213" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn".*"conn_state"\s*:\s*"RSTO"</match>
+    <description>Zeek conn — conn_state RSTO $(id.orig_h) -> $(id.resp_h)</description>
+  </rule>
+  <rule id="966214" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn".*"conn_state"\s*:\s*"RSTR"</match>
+    <description>Zeek conn — conn_state RSTR $(id.orig_h) -> $(id.resp_h)</description>
+  </rule>
+  <rule id="966215" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn".*"conn_state"\s*:\s*"SHR"</match>
+    <description>Zeek conn — conn_state SHR $(id.orig_h) -> $(id.resp_h)</description>
+  </rule>
+  <rule id="966216" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn".*"conn_state"\s*:\s*"OTH"</match>
+    <description>Zeek conn — conn_state OTH $(id.orig_h) -> $(id.resp_h)</description>
+  </rule>
+
+  <!-- DNS: suspicious TLDs (split per TLD; Zeek lowercases query) -->
+  <rule id="966310" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"dns".*"query"\s*:\s*"[^"]*\.onion\.?"</match>
+    <description>Zeek DNS — Suspicious TLD (.onion) $(query)</description>
+  </rule>
+  <rule id="966311" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"dns".*"query"\s*:\s*"[^"]*\.bit\.?"</match>
+    <description>Zeek DNS — Suspicious TLD (.bit) $(query)</description>
+  </rule>
+  <rule id="966312" level="6">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"dns".*"query"\s*:\s*"[^"]*\.tor\.?"</match>
+    <description>Zeek DNS — Suspicious TLD (.tor) $(query)</description>
+  </rule>
+  <rule id="966313" level="5">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"dns".*"query"\s*:\s*"[^"]*\.top\.?"</match>
+    <description>Zeek DNS — Suspicious TLD (.top) $(query)</description>
+  </rule>
+  <rule id="966314" level="5">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"dns".*"query"\s*:\s*"[^"]*\.xyz\.?"</match>
+    <description>Zeek DNS — Suspicious TLD (.xyz) $(query)</description>
+  </rule>
+
+  <!-- DNS: NXDOMAIN -->
+  <rule id="966301" level="4">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"dns".*"rcode_name"\s*:\s*"NXDOMAIN"</match>
+    <description>Zeek DNS — NXDOMAIN for $(query)</description>
+  </rule>
+
+  <!-- CONN: catch-all visibility line -->
+  <rule id="966399" level="2">
+    <if_sid>966000</if_sid>
+    <match>"_path"\s*:\s*"conn"</match>
+    <description>Zeek conn — $(id.orig_h):$(id.orig_p) -> $(id.resp_h):$(id.resp_p) proto $(proto) state $(conn_state)</description>
+  </rule>
+
+</group>
