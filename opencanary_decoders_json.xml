@@ -1,0 +1,61 @@
+  <decoder name="jd-opencanary">
+    <prematch type="pcre2">^\s*\{.*"logtype"\s*:\s*\d+.*\}\s*$</prematch>
+    <regex type="pcre2">"logtype"\s*:\s*(\d+)</regex>
+    <order>logtype</order>
+  </decoder>
+
+  <!-- Sibling extractors (one field per block) -->
+  <decoder name="jd-opencanary-src-host">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"src_host"\s*:\s*"([^"]+)"</regex>
+    <order>src_host</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-src-port">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"src_port"\s*:\s*(\d+)</regex>
+    <order>src_port</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-dst-host">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"dst_host"\s*:\s*"([^"]+)"</regex>
+    <order>dst_host</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-dst-port">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"dst_port"\s*:\s*(\d+)</regex>
+    <order>dst_port</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-node">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"node_id"\s*:\s*"([^"]+)"</regex>
+    <order>node_id</order>
+  </decoder>
+
+  <!-- logdata.* helpers -->
+  <decoder name="jd-opencanary-logdata-hostname">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"logdata"\s*:\s*\{[^}]*"HOSTNAME"\s*:\s*"([^"]+)"</regex>
+    <order>logdata.HOSTNAME</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-logdata-path">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"logdata"\s*:\s*\{[^}]*"PATH"\s*:\s*"([^"]+)"</regex>
+    <order>logdata.PATH</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-logdata-skin">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"logdata"\s*:\s*\{[^}]*"SKIN"\s*:\s*"([^"]+)"</regex>
+    <order>logdata.SKIN</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-logdata-ua">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"logdata"\s*:\s*\{[^}]*"USERAGENT"\s*:\s*"([^"]+)"</regex>
+    <order>logdata.USERAGENT</order>
+  </decoder>
