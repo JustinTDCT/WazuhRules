@@ -1,0 +1,196 @@
+<group name="local,opencanary,universal">
+  <!-- ===== Bases (OR by duplication): raw, live(data.*), and generic-match ===== -->
+  <rule id="990000" level="0">
+    <field name="logtype">^\d+$</field>
+    <description>OpenCanary base (raw/logtest)</description>
+  </rule>
+  <rule id="990001" level="0">
+    <field name="data.logtype">^\d+$</field>
+    <description>OpenCanary base (live/data.*)</description>
+  </rule>
+  <rule id="990002" level="0">
+    <decoded_as>json</decoded_as>
+    <match>"logtype"\s*:\s*\d+</match>
+    <description>OpenCanary base (generic-json)</description>
+  </rule>
+
+  <!-- ===== Services (FTP/HTTP/HTTPS/MSSQL/MySQL/RDP/SMB/Telnet/TFTP/SSH) ===== -->
+  <!-- Each service has 3 rules: raw, live, generic-match -->
+
+  <!-- FTP (21) -->
+  <rule id="990030" level="8"><if_sid>990000</if_sid>
+    <field name="dst_port">^21$</field>
+    <description>OpenCanary - FTP probe from $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990031" level="8"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^21$</field>
+    <description>OpenCanary - FTP probe from $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990032" level="8"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*21</match>
+    <description>OpenCanary - FTP probe</description>
+  </rule>
+
+  <!-- HTTP (80) -->
+  <rule id="990040" level="6"><if_sid>990000</if_sid>
+    <field name="dst_port">^80$</field>
+    <description>OpenCanary - HTTP $(logdata.PATH) UA=$(logdata.USERAGENT) src $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990041" level="6"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^80$</field>
+    <description>OpenCanary - HTTP $(data.logdata.PATH) UA=$(data.logdata.USERAGENT) src $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990042" level="6"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*80</match>
+    <description>OpenCanary - HTTP request</description>
+  </rule>
+
+  <!-- HTTPS (443) -->
+  <rule id="990050" level="6"><if_sid>990000</if_sid>
+    <field name="dst_port">^443$</field>
+    <description>OpenCanary - HTTPS $(logdata.PATH) UA=$(logdata.USERAGENT) src $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990051" level="6"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^443$</field>
+    <description>OpenCanary - HTTPS $(data.logdata.PATH) UA=$(data.logdata.USERAGENT) src $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990052" level="6"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*443</match>
+    <description>OpenCanary - HTTPS request</description>
+  </rule>
+
+  <!-- MSSQL (1433) -->
+  <rule id="990060" level="7"><if_sid>990000</if_sid>
+    <field name="dst_port">^1433$</field>
+    <description>OpenCanary - MSSQL probe from $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990061" level="7"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^1433$</field>
+    <description>OpenCanary - MSSQL probe from $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990062" level="7"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*1433</match>
+    <description>OpenCanary - MSSQL probe</description>
+  </rule>
+
+  <!-- MySQL (3306) -->
+  <rule id="990070" level="7"><if_sid>990000</if_sid>
+    <field name="dst_port">^3306$</field>
+    <description>OpenCanary - MySQL probe from $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990071" level="7"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^3306$</field>
+    <description>OpenCanary - MySQL probe from $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990072" level="7"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*3306</match>
+    <description>OpenCanary - MySQL probe</description>
+  </rule>
+
+  <!-- RDP (3389) -->
+  <rule id="990080" level="9"><if_sid>990000</if_sid>
+    <field name="dst_port">^3389$</field>
+    <description>OpenCanary - RDP probe from $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990081" level="9"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^3389$</field>
+    <description>OpenCanary - RDP probe from $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990082" level="9"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*3389</match>
+    <description>OpenCanary - RDP probe</description>
+  </rule>
+
+  <!-- SMB (445 & 139) -->
+  <rule id="990090" level="8"><if_sid>990000</if_sid>
+    <field name="dst_port">^445$</field>
+    <description>OpenCanary - SMB probe (445) src $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990091" level="8"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^445$</field>
+    <description>OpenCanary - SMB probe (445) src $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990092" level="8"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*445</match>
+    <description>OpenCanary - SMB probe (445)</description>
+  </rule>
+  <rule id="990093" level="8"><if_sid>990000</if_sid>
+    <field name="dst_port">^139$</field>
+    <description>OpenCanary - SMB probe (139) src $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990094" level="8"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^139$</field>
+    <description>OpenCanary - SMB probe (139) src $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990095" level="8"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*139</match>
+    <description>OpenCanary - SMB probe (139)</description>
+  </rule>
+
+  <!-- Telnet (23) -->
+  <rule id="990100" level="8"><if_sid>990000</if_sid>
+    <field name="dst_port">^23$</field>
+    <description>OpenCanary - Telnet probe from $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990101" level="8"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^23$</field>
+    <description>OpenCanary - Telnet probe from $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990102" level="8"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*23</match>
+    <description>OpenCanary - Telnet probe</description>
+  </rule>
+
+  <!-- TFTP (69) -->
+  <rule id="990110" level="7"><if_sid>990000</if_sid>
+    <field name="dst_port">^69$</field>
+    <description>OpenCanary - TFTP probe from $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990111" level="7"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^69$</field>
+    <description>OpenCanary - TFTP probe from $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990112" level="7"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*69</match>
+    <description>OpenCanary - TFTP probe</description>
+  </rule>
+
+  <!-- SSH (22) -->
+  <rule id="990120" level="9"><if_sid>990000</if_sid>
+    <field name="dst_port">^22$</field>
+    <description>OpenCanary - SSH probe/login from $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990121" level="9"><if_sid>990001</if_sid>
+    <field name="data.dst_port">^22$</field>
+    <description>OpenCanary - SSH probe/login from $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990122" level="9"><if_sid>990002</if_sid>
+    <match>"dst_port"\s*:\s*22</match>
+    <description>OpenCanary - SSH probe/login</description>
+  </rule>
+
+  <!-- Credentials present -->
+  <rule id="990200" level="12"><if_sid>990000</if_sid>
+    <field name="logdata.USERNAME">.+</field>
+    <description>OpenCanary - Credential seen (user $(logdata.USERNAME)) src $(src_host) -> $(dst_host) node $(node_id)</description>
+  </rule>
+  <rule id="990201" level="12"><if_sid>990001</if_sid>
+    <field name="data.logdata.USERNAME">.+</field>
+    <description>OpenCanary - Credential seen (user $(data.logdata.USERNAME)) src $(data.src_host) -> $(data.dst_host) node $(data.node_id)</description>
+  </rule>
+  <rule id="990202" level="12"><if_sid>990002</if_sid>
+    <match>"USERNAME"\s*:\s*"</match>
+    <description>OpenCanary - Credential seen</description>
+  </rule>
+
+  <!-- Generic visibility -->
+  <rule id="990299" level="6"><if_sid>990000</if_sid>
+    <description>OpenCanary - Event $(logtype) from $(src_host):$(src_port) -> $(dst_host):$(dst_port) node $(node_id)</description>
+  </rule>
+  <rule id="990298" level="6"><if_sid>990001</if_sid>
+    <description>OpenCanary - Event $(data.logtype) from $(data.src_host):$(data.src_port) -> $(data.dst_host):$(data.dst_port) node $(data.node_id)</description>
+  </rule>
+  <rule id="990297" level="6"><if_sid>990002</if_sid>
+    <description>OpenCanary - Event (json)</description>
+  </rule>
+</group>
