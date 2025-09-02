@@ -1,0 +1,98 @@
+<group name="local,opencanary">
+  <!-- Base: any JSON with numeric logtype (Logtest/raw uses bare fields) -->
+  <rule id="983000" level="0">
+    <field name="logtype">^\d+$</field>
+    <description>OpenCanary (logtest) base</description>
+  </rule>
+
+  <!-- SSH -->
+  <rule id="983010" level="9">
+    <if_sid>983000</if_sid>
+    <field name="dst_port">^22$</field>
+    <description>OpenCanary - SSH probe/login from $(src_host) on $(sensor)</description>
+  </rule>
+
+  <!-- SMB -->
+  <rule id="983011" level="8">
+    <if_sid>983000</if_sid>
+    <field name="dst_port">^445$</field>
+    <description>OpenCanary - SMB probe from $(src_host) on $(sensor)</description>
+  </rule>
+
+  <!-- Credential present -->
+  <rule id="983020" level="12">
+    <if_sid>983000</if_sid>
+    <field name="logdata.USERNAME">.+</field>
+    <description>OpenCanary - Credential seen (user $(logdata.USERNAME)) from $(src_host) on $(sensor)</description>
+  </rule>
+
+  <!-- Generic visibility -->
+  <rule id="983099" level="6">
+    <if_sid>983000</if_sid>
+    <description>OpenCanary - Event $(logtype) from $(src_host) -> port $(dst_port) on $(sensor)</description>
+  </rule>
+  
+ <!-- FTP -->
+<rule id="983030" level="8">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^21$</field>
+  <description>OpenCanary - FTP probe from $(src_host) on $(sensor)</description>
+</rule>
+
+<!-- HTTP / HTTPS -->
+<rule id="983031" level="5">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^80$</field>
+  <description>OpenCanary - HTTP probe from $(src_host) on $(sensor)</description>
+</rule>
+<rule id="983032" level="6">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^443$</field>
+  <description>OpenCanary - HTTPS probe from $(src_host) on $(sensor)</description>
+</rule>
+
+<!-- MSSQL / MySQL -->
+<rule id="983033" level="7">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^1433$</field>
+  <description>OpenCanary - MSSQL probe from $(src_host) on $(sensor)</description>
+</rule>
+<rule id="983034" level="7">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^3306$</field>
+  <description>OpenCanary - MySQL probe from $(src_host) on $(sensor)</description>
+</rule>
+
+<!-- RDP -->
+<rule id="983035" level="9">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^3389$</field>
+  <description>OpenCanary - RDP probe from $(src_host) on $(sensor)</description>
+</rule>
+
+<!-- SMB (both 445 and 139) -->
+<rule id="983036" level="8">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^445$</field>
+  <description>OpenCanary - SMB probe (445) from $(src_host) on $(sensor)</description>
+</rule>
+<rule id="983037" level="8">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^139$</field>
+  <description>OpenCanary - SMB probe (139) from $(src_host) on $(sensor)</description>
+</rule>
+
+<!-- Telnet -->
+<rule id="983038" level="8">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^23$</field>
+  <description>OpenCanary - Telnet probe from $(src_host) on $(sensor)</description>
+</rule>
+
+<!-- TFTP -->
+<rule id="983039" level="7">
+  <if_sid>983000</if_sid>
+  <field name="dst_port">^69$</field>
+  <description>OpenCanary - TFTP probe from $(src_host) on $(sensor)</description>
+</rule>
+</group>
