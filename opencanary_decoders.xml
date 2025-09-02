@@ -1,0 +1,31 @@
+  <decoder name="jd-opencanary">
+    <prematch type="pcre2">^\s*\{.*"logtype"\s*:\s*\d+.*\}\s*$</prematch>
+    <regex type="pcre2">"logtype"\s*:\s*(\d+)</regex>
+    <order>logtype</order>
+  </decoder>
+
+  <!-- Sibling extractors (one field per block, no grandchildren) -->
+  <decoder name="jd-opencanary-src">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"src_host"\s*:\s*"([^"]+)"</regex>
+    <order>src_host</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-dstport">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"dst_port"\s*:\s*(\d+)</regex>
+    <order>dst_port</order>
+  </decoder>
+
+  <decoder name="jd-opencanary-sensor">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"sensor"\s*:\s*"([^"]+)"</regex>
+    <order>sensor</order>
+  </decoder>
+
+  <!-- Optional: note when a credential was present (we just flag existence) -->
+  <decoder name="jd-opencanary-hascreds">
+    <parent>jd-opencanary</parent>
+    <regex type="pcre2">"logdata"\s*:\s*\{[^}]*"USER(NAME)?"\s*:\s*"([^"]+)"</regex>
+    <order>_has_user,user</order>
+  </decoder>
